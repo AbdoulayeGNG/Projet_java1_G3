@@ -5,7 +5,7 @@ USE gestion_pharmacie;
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL UNIQUE
-);
+)engine=innodb;
 
 -- Table des fournisseurs
 CREATE TABLE fournisseurs (
@@ -13,7 +13,7 @@ CREATE TABLE fournisseurs (
     nom VARCHAR(255) NOT NULL,
     contact VARCHAR(100) NOT NULL,
     adresse TEXT
-);
+)engine=innodb;
 
 -- Table des médicaments
 CREATE TABLE medicaments (
@@ -27,14 +27,14 @@ CREATE TABLE medicaments (
     fournisseur_id INT,
     FOREIGN KEY (categorie_id) REFERENCES categories(id) ON DELETE SET NULL,
     FOREIGN KEY (fournisseur_id) REFERENCES fournisseurs(id) ON DELETE SET NULL
-);
+)engine=innodb;
 
 -- Table des clients
 CREATE TABLE clients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     contact VARCHAR(100) UNIQUE
-);
+)engine=innodb;
 
 -- Table des commandes fournisseurs
 CREATE TABLE commandes_fournisseurs (
@@ -43,7 +43,7 @@ CREATE TABLE commandes_fournisseurs (
     date_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
     statut ENUM('En attente', 'Livrée', 'Annulée') DEFAULT 'En attente',
     FOREIGN KEY (fournisseur_id) REFERENCES fournisseurs(id) ON DELETE CASCADE
-);
+)engine=innodb;
 
 -- Détails des commandes fournisseurs (quantité et prix d'achat des médicaments)
 CREATE TABLE details_commande_fournisseur (
@@ -54,7 +54,7 @@ CREATE TABLE details_commande_fournisseur (
     prix_achat DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (commande_id) REFERENCES commandes_fournisseurs(id) ON DELETE CASCADE,
     FOREIGN KEY (medicament_id) REFERENCES medicaments(id) ON DELETE CASCADE
-);
+)engine=innodb;
 
 -- Table des ventes
 CREATE TABLE ventes (
@@ -63,7 +63,7 @@ CREATE TABLE ventes (
     date_vente DATETIME DEFAULT CURRENT_TIMESTAMP,
     total DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE SET NULL
-);
+)engine=innodb;
 
 -- Détails des ventes (quantité et prix unitaire des médicaments vendus)
 CREATE TABLE details_ventes (
@@ -74,7 +74,7 @@ CREATE TABLE details_ventes (
     prix_unitaire DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (vente_id) REFERENCES ventes(id) ON DELETE CASCADE,
     FOREIGN KEY (medicament_id) REFERENCES medicaments(id) ON DELETE CASCADE
-);
+)engine=innodb;
 
 -- Table des utilisateurs (Pharmaciens, Admins, Caissiers)
 CREATE TABLE utilisateurs (
@@ -83,7 +83,7 @@ CREATE TABLE utilisateurs (
     email VARCHAR(255) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(255) NOT NULL,
     role ENUM('Admin', 'Pharmacien', 'Caissier') NOT NULL DEFAULT 'Pharmacien'
-);
+)engine=innodb;
 
 -- Création d'index pour améliorer les performances des recherches
 CREATE INDEX idx_medicament_nom ON medicaments(nom);
